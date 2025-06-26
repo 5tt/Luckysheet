@@ -1360,6 +1360,7 @@ const luckysheetformula = {
             curv.ct.fa = "General";
             value = "";
         } else if (isCurInline) {
+            // 这里应该是将单行文本转换为多行文本格式 yeweikang20240601
             if (getObjType(curv) != "object") {
                 curv = {};
             }
@@ -1416,7 +1417,9 @@ const luckysheetformula = {
                 curv.ct.fa != "@" &&
                 !isRealNull(value)
             ) {
-                delete curv.m; //更新时间m处理 ， 会实际删除单元格数据的参数（flowdata时已删除）
+                if(curv.m && curv.v === curv.m){ //v和m相同时才允许删除m 避免值为TRUE时，执行撤回操作时，变成了true  yeweikang20240601
+                    delete curv.m; //更新时间m处理 ， 会实际删除单元格数据的参数（flowdata时已删除）
+                }
                 if (curv.f != null) {
                     //如果原来是公式，而更新的数据不是公式，则把公式删除
                     delete curv.f;

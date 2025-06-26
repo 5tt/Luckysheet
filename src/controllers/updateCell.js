@@ -34,11 +34,15 @@ export function luckysheetupdateCell(row_index1, col_index1, d, cover, isnotfocu
     // 编辑单元格时发送指令到后台，通知其他单元格更新为“正在输入”状态
     server.saveParam("mv", Store.currentSheetIndex,  {op:"enterEdit",range:Store.luckysheet_select_save});
 
+    //声明变量，后面使用，用于下拉列表框时，输入框禁止录入
+    let dropdownMark = false
+
     //数据验证
     if(dataVerificationCtrl.dataVerification != null && dataVerificationCtrl.dataVerification[row_index1 + '_' + col_index1] != null){
         let dataVerificationItem = dataVerificationCtrl.dataVerification[row_index1 + '_' + col_index1];
         if(dataVerificationItem.type == 'dropdown'){
             dataVerificationCtrl.dropdownListShow();
+            dropdownMark =true
         }
         else if(dataVerificationItem.type == 'checkbox'){
             return;
@@ -77,8 +81,8 @@ export function luckysheetupdateCell(row_index1, col_index1, d, cover, isnotfocu
     }
 
     let input_postition = {
-        "min-width": col - col_pre+ 1- 8, 
-        "min-height": row - row_pre + 1- 4,  
+        "min-width": col - col_pre+ 1- 8 +2 +0.5, 
+        "min-height": row - row_pre + 1- 4 +2 +0.5,  
         
         "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth, 
         "max-height": winH + scrollTop - row_pre - 20 - 15 - Store.toolbarHeight - Store.infobarHeight - Store.calculatebarHeight - Store.sheetBarHeight - Store.statisticBarHeight, 
@@ -91,6 +95,13 @@ export function luckysheetupdateCell(row_index1, col_index1, d, cover, isnotfocu
         "transform-origin":"left top",
         "width":(100 / Store.zoomRatio) + "%",
         "height":(100 / Store.zoomRatio) + "%",
+    }
+
+    //如果为下拉框，则禁止手动输入
+    if (dropdownMark){
+        inputContentScale['-webkit-user-modify'] = 'unset'
+    }else{
+        inputContentScale['-webkit-user-modify'] = ''
     }
 
     Store.luckysheetCellUpdate = [row_index, col_index];
@@ -246,9 +257,67 @@ export function luckysheetupdateCell(row_index1, col_index1, d, cover, isnotfocu
 
         input_postition["left"] = newLeft-2;
     }
-
     $("#luckysheet-input-box").css(input_postition);
     $("#luckysheet-rich-text-editor").css(inputContentScale);
+
+    let paddingTop = 0;
+    if (d[row_index] != null) {
+        let cell = d[row_index][col_index];
+        if(cell==null || Object.keys(cell).length==0 || cell["vt"]=="0"){
+            // 输入框lineheight设置成 min-height一样  yeweikang20250601
+            // input框中貌似没有控制字体水平线的，先用穷举法=-=
+            // luckysheet-input-box
+            let editorSpanHeight =  $('#luckysheet-rich-text-editor span:first').height();
+            let inputAreaHeight = editorSpanHeight ? editorSpanHeight : $('#luckysheet-rich-text-editor').height();
+            // console.log(inputAreaHeight);
+            let vOffset = 0;
+            let cssText = $("#luckysheet-input-box").get(0).style.cssText
+            if(cssText.includes("font-size: 9pt;")){
+                vOffset = -2
+            } else if (cssText.includes("font-size: 10pt;")){
+                vOffset = -2
+            } else if (cssText.includes("font-size: 11pt;")){
+                vOffset = -1
+            } else if (cssText.includes("font-size: 12pt;")){
+                vOffset = -2
+            } else if (cssText.includes("font-size: 14pt;")){
+                vOffset = -2
+            } else if (cssText.includes("font-size: 16pt;")){
+                vOffset = -2.5
+            } else if (cssText.includes("font-size: 18pt;")){
+                vOffset = -2.5
+            } else if (cssText.includes("font-size: 20pt;")){
+                vOffset = -2.5
+            } else if (cssText.includes("font-size: 22pt;")){
+                vOffset = -3
+            } else if (cssText.includes("font-size: 24pt;")){
+                vOffset = -4
+            } else if (cssText.includes("font-size: 26pt;")){
+                vOffset = -4
+            } else if (cssText.includes("font-size: 28pt;")){
+                vOffset = -4
+            } else if (cssText.includes("font-size: 36pt;")){
+                vOffset = -6
+            } else if (cssText.includes("font-size: 48pt;")){
+                vOffset = -8
+            } else if (cssText.includes("font-size: 72pt;")){
+                vOffset = -12.5
+            }
+            paddingTop = ((row - row_pre)-inputAreaHeight)/2 + vOffset;
+        }
+    }
+    
+    $(".luckysheet-cell-input").css({
+        // "line-height": row - row_pre + 1- 4 +2 +0.5 -2 + "px",
+        "padding-left": "1px",
+        "font-family": "Microsoft YaHei",
+        "overflow-y": "hidden",
+        "padding-top": paddingTop>0?paddingTop:0 + "px"
+    })
+    // console.log((row - row_pre + 1 + 1- 4 -4))
+    // console.log(((row - row_pre)-inputAreaHeight)/2)
+    
+
 
     //日期
     if(d[row_index1][col_index1] && d[row_index1][col_index1].ct && d[row_index1][col_index1].ct.t == 'd'){

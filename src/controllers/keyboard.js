@@ -942,7 +942,7 @@ export function keyboardInitial(){
     });
 
     //top workBook rename
-    $("#luckysheet_info_detail_input").val(server.title).css("width", getByteLen(server.title) * 10).keydown(function(){
+    $("#luckysheet_info_detail_input").val(server.title).css("width", getByteLen(server.title) * 10 + 20).keydown(function(){
         let ctrlKey = event.ctrlKey;
         let altKey = event.altKey;
         let shiftKey = event.shiftKey;
@@ -960,7 +960,7 @@ export function keyboardInitial(){
         let containerlen = $("#" + Store.container).outerWidth();
         let otherlen = 100;
 
-        let minuslen = containerlen- savelen - updatelen - userlen - otherlen;
+        let minuslen = containerlen- savelen - updatelen - userlen - otherlen +20;
         if(inputlen > minuslen){
             $("#luckysheet_info_detail_input").css("width", minuslen);
         }

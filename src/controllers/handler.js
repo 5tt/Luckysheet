@@ -136,6 +136,7 @@ export default function luckysheetHandler() {
     $("#luckysheet-cell-main")
         .scroll(function() {})
         .mousewheel(function(event, delta) {
+            $(document).trigger('mousemove.luckysheetEvent', event);  //滚动的时候也触发移动事件,用于触发音标弹窗 yeweikang 20240726
             event.preventDefault();
         });
 
@@ -1795,7 +1796,10 @@ export default function luckysheetHandler() {
     }
 
     //表格mousemove
-    $(document).on("mousemove.luckysheetEvent", function(event) {
+    $(document).on("mousemove.luckysheetEvent", function(event, mousewheelEvent) {
+        if(typeof(mousewheelEvent) != 'undefined'){
+            event = mousewheelEvent;
+        }
         luckysheetPostil.overshow(event); //有批注显示
         hyperlinkCtrl.overshow(event); //链接提示显示
 
@@ -1868,6 +1872,7 @@ export default function luckysheetHandler() {
                     sheetFile,
                     moveState,
                     luckysheetTableContent,
+                    event,
                 );
             }
             // }

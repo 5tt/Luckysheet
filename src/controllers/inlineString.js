@@ -388,7 +388,7 @@ export function convertCssToStyleList(cssText){
     let styleList = {    
         "ff":locale_fontarray[0], //font family
         "fc":"#000000",//font color
-        "fs":10,//font size
+        "fs":Store.defaultFontSize,//font size  yeweikang20240601
         "cl":0,//strike
         "un":0,//underline
         "bl":0,//blod

@@ -1317,7 +1317,7 @@ const dataVerificationCtrl = {
             let result = false;
 
             for(let i = 0; i < list.length; i++){
-                if(list[i] == cellValue){
+                if(list[i] == cellValue.toString().toUpperCase()){
                     result = true;
                     break;
                 }

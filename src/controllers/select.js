@@ -87,7 +87,10 @@ function selectHightlightShow(isRestore = false) {
             Store.luckysheet_select_save[i]["top_move"] = row_pre;
             Store.luckysheet_select_save[i]["height_move"] = row - row_pre - 1;
 
-            if (i == 0) {
+            // if (i == 0) {
+            if (i == Store.luckysheet_select_save.length-1) {  //yeweikang20240601  最后一个框效果不一样
+                // console.log(Store.luckysheet_select_save.length)
+                // console.log(Store.luckysheet_select_save)
                 if (Store.luckysheet_select_save.length == 1) {
                     if (browser.mobilecheck()) {//移动端
                         $("#luckysheet-cell-selected-boxs #luckysheet-cell-selected").css({
@@ -96,7 +99,7 @@ function selectHightlightShow(isRestore = false) {
                             "top": Store.luckysheet_select_save[i]["top_move"],
                             "height": Store.luckysheet_select_save[i]["height_move"],
                             "display": "block",
-                            "border": "1px solid #0188fb"
+                            // "border": "1px solid #0188fb" yeweikang20240814
                         })
                             .find(".luckysheet-cs-draghandle")
                             .css("display", "block")
@@ -114,7 +117,13 @@ function selectHightlightShow(isRestore = false) {
                             "top": Store.luckysheet_select_save[i]["top_move"],
                             "height": Store.luckysheet_select_save[i]["height_move"],
                             "display": "block",
-                            "border": "1px solid #0188fb"
+                            // "border": "1px solid #0188fb"  yeweikang20240601
+                            "clip-path": "polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0, 2px 2px, " 
+                            + (Store.luckysheet_select_save[i]["width"]+1) + "px 2px, " 
+                            + (Store.luckysheet_select_save[i]["width"]+1) + "px " + (Store.luckysheet_select_save[i]["height"]-0) + "px," 
+                            + (Store.luckysheet_select_save[i]["width"]-0) + "px " + (Store.luckysheet_select_save[i]["height"]-0) + "px,"
+                            + (Store.luckysheet_select_save[i]["width"]-0) + "px " + (Store.luckysheet_select_save[i]["height"]+1) + "px, 2px " 
+                            + (Store.luckysheet_select_save[i]["height"]+1) + "px,  2px 2px)"
                         })
                             .find(".luckysheet-cs-draghandle")
                             .css("display", "block")
@@ -133,7 +142,7 @@ function selectHightlightShow(isRestore = false) {
                         "top": Store.luckysheet_select_save[i]["top_move"],
                         "height": Store.luckysheet_select_save[i]["height_move"],
                         "display": "block",
-                        "border": "1px solid rgba(1, 136, 251, 0.15)"
+                        // "border": "1px solid rgba(1, 136, 251, 0.15)"  yeweikang20240601
                     })
                         .find(".luckysheet-cs-draghandle")
                         .css("display", "none")

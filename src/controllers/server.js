@@ -972,7 +972,7 @@ const server = {
 	        }
 	    }
 	    else if(type == "na"){ //表格名称
-	        $("#luckysheet_info_detail_input").val(value).css("width", getByteLen(value) * 10);
+	        $("#luckysheet_info_detail_input").val(value).css("width", getByteLen(value) * 10 + 20);
 	    }
 	},
     multipleIndex: 0,

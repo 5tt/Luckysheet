@@ -242,7 +242,6 @@ function getCellTextSplitArr(strValue, strArr, cellWidth, canvas){
 //获取有值单元格文本大小
 // let measureTextCache = {}, measureTextCacheTimeOut = null;
 function getMeasureText(value, ctx, fontset){
-
     let mtc = Store.measureTextCache[value + "_" + ctx.font];
     if(fontset!=null){
         mtc = Store.measureTextCache[value + "_" + fontset];
@@ -298,35 +297,37 @@ function getMeasureText(value, ctx, fontset){
             //console.log(value, oneLineTextHeight, measureText.actualBoundingBoxDescent+measureText.actualBoundingBoxAscent,ctx.font);
         }
 
-        if(ctx.textBaseline == 'alphabetic'){
-            let descText = "gjpqy", matchText="abcdABCD";
-            let descTextMeasure = Store.measureTextCache[descText + "_" + ctx.font];
-            if(fontset!=null){
-                descTextMeasure = Store.measureTextCache[descText + "_" + fontset];
-            }
+        // 这一段会导致文字垂直方向居中偏离， yeweikang20240601
+        // if(ctx.textBaseline == 'alphabetic'){
+        //     let descText = "gjpqy", matchText="abcdABCD";
+        //     let descTextMeasure = Store.measureTextCache[descText + "_" + ctx.font];
+        //     if(fontset!=null){
+        //         descTextMeasure = Store.measureTextCache[descText + "_" + fontset];
+        //     }
 
-            let matchTextMeasure = Store.measureTextCache[matchText + "_" + ctx.font];
-            if(fontset!=null){
-                matchTextMeasure = Store.measureTextCache[matchText + "_" + fontset];
-            }
+        //     let matchTextMeasure = Store.measureTextCache[matchText + "_" + ctx.font];
+        //     if(fontset!=null){
+        //         matchTextMeasure = Store.measureTextCache[matchText + "_" + fontset];
+        //     }
 
-            if(descTextMeasure == null){
-                descTextMeasure = ctx.measureText(descText);
-            }
+        //     if(descTextMeasure == null){
+        //         descTextMeasure = ctx.measureText(descText);
+        //     }
 
-            if(matchTextMeasure == null){
-                matchTextMeasure = ctx.measureText(matchText);
-            }
+        //     if(matchTextMeasure == null){
+        //         matchTextMeasure = ctx.measureText(matchText);
+        //     }
 
-            if(cache.actualBoundingBoxDescent<=matchTextMeasure.actualBoundingBoxDescent){
-                cache.actualBoundingBoxDescent = descTextMeasure.actualBoundingBoxDescent;
-                if(cache.actualBoundingBoxDescent==null){
-                    cache.actualBoundingBoxDescent = 0;
-                }
-            }
+        //     if(cache.actualBoundingBoxDescent<=matchTextMeasure.actualBoundingBoxDescent){
+        //         cache.actualBoundingBoxDescent = descTextMeasure.actualBoundingBoxDescent;
+        //         if(cache.actualBoundingBoxDescent==null){
+        //             cache.actualBoundingBoxDescent = 0;
+        //         }
+        //     }
 
 
-        }
+        // }
+
 
         cache.width *= Store.zoomRatio;
         cache.actualBoundingBoxDescent *= Store.zoomRatio;
@@ -700,7 +701,8 @@ function getCellTextInfo(cell , ctx, option){
                     top:top+word.height-space_height,
                     asc:word.height,
                     desc:0,
-                    fs:fontSize
+                    fs:fontSize,
+                    verticalAlign:verticalAlign,
                 });
 
                 textContent.values.push(word);
@@ -712,7 +714,11 @@ function getCellTextInfo(cell , ctx, option){
     }
     else{
         let supportBoundBox = isSupportBoundingBox(ctx);
-        if(supportBoundBox){
+
+        //yeweikang 文字垂直方向位置问题 20240601 默认居中相关修改
+        if(verticalAlign == "0"){
+            ctx.textBaseline = 'middle';
+        }else if(supportBoundBox){
             ctx.textBaseline = 'alphabetic';
         }
         else{
@@ -1210,11 +1216,13 @@ function getCellTextInfo(cell , ctx, option){
                     let sp = splitLists[s];
                     if(rt!=0){//rotate
                         sWidth += sp.width;
-                        sHeight = Math.max(sHeight, sp.height-(supportBoundBox?sp.desc:0));
+                        // sHeight = Math.max(sHeight, sp.height-(supportBoundBox?sp.desc:0));
+                        sHeight = Math.max(sHeight, sp.height); // yeweikang
                     }
                     else{//plain
                         sWidth += sp.width;
-                        sHeight = Math.max(sHeight, sp.height-(supportBoundBox?sp.desc:0));
+                        // sHeight = Math.max(sHeight, sp.height-(supportBoundBox?sp.desc:0));
+                        sHeight = Math.max(sHeight, sp.height); // yeweikang
                     }
                     maxDesc = Math.max(maxDesc,(supportBoundBox?sp.desc:0));
                     maxAsc = Math.max(maxAsc, sp.asc);
@@ -1354,7 +1362,8 @@ function getCellTextInfo(cell , ctx, option){
                             top:top,
                             asc:size.asc,
                             desc:size.desc,
-                            fs:wordGroup.fs
+                            fs:wordGroup.fs,
+                            verticalAlign:verticalAlign,
                         });
 
                         textContent.values.push(wordGroup);
@@ -1438,7 +1447,8 @@ function getCellTextInfo(cell , ctx, option){
                                 top:top,
                                 asc:size.asc,
                                 desc:size.desc,
-                                fs:wordGroup.fs
+                                fs:wordGroup.fs,
+                                verticalAlign:verticalAlign,
                             });
 
                         }
@@ -1469,7 +1479,8 @@ function getCellTextInfo(cell , ctx, option){
                                 top:top,
                                 asc:size.asc,
                                 desc:size.desc,
-                                fs:wordGroup.fs
+                                fs:wordGroup.fs,
+                                verticalAlign:verticalAlign,
                             });
                         }
 
@@ -1556,9 +1567,19 @@ function getCellTextInfo(cell , ctx, option){
 
         }
         else{
+            //一般字段垂直方向位置计算  yeweikang
+            // console.log("aa" + verticalAlign)
+            // if(verticalAlign == "0"){
+            //     debugger
+            //     ctx.textBaseline = "middle"
+            // }
             let measureText = getMeasureText(value, ctx);
             let textWidth = measureText.width;
             let textHeight = measureText.actualBoundingBoxDescent + measureText.actualBoundingBoxAscent;
+            if(verticalAlign == "0"){
+                textHeight = measureText.actualBoundingBoxDescent>measureText.actualBoundingBoxAscent?measureText.actualBoundingBoxDescent*2:measureText.actualBoundingBoxAscent*2;
+            }
+
 
             textContent.rotate = rt;
 
@@ -1595,7 +1616,8 @@ function getCellTextInfo(cell , ctx, option){
 
             let top = (cellHeight - space_height)  - height + measureText.actualBoundingBoxAscent * Math.cos(rtPI) + textWidth * Math.sin(rtPI)*isRotateUp; //默认为2，下对齐
             if(verticalAlign == "0"){ //居中对齐
-                top = cellHeight / 2  - (height / 2) + measureText.actualBoundingBoxAscent* Math.cos(rtPI) + textWidth * Math.sin(rtPI)*isRotateUp;
+                // top = cellHeight / 2  - (height / 2) + measureText.actualBoundingBoxAscent* Math.cos(rtPI) + textWidth * Math.sin(rtPI)*isRotateUp;
+                top = cellHeight / 2  - (height / 2) + (height / 2)* Math.cos(rtPI) + textWidth * Math.sin(rtPI)*isRotateUp;
             }
             else if(verticalAlign == "1"){ //上对齐
                 top = space_height + measureText.actualBoundingBoxAscent* Math.cos(rtPI) + textWidth * Math.sin(rtPI)*isRotateUp;
@@ -1620,6 +1642,7 @@ function getCellTextInfo(cell , ctx, option){
                 asc:measureText.actualBoundingBoxAscent,
                 desc:measureText.actualBoundingBoxDescent,
                 fs:fontSize,
+                verticalAlign:verticalAlign,
             });
 
             textContent.values.push(wordGroup);
@@ -1651,18 +1674,27 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
     }
 
     if(cancelLine!="0"){
+        debugger
+
+        let offsetY = top-asc/2;
+        if(option.verticalAlign == '0'){
+            offsetY = top - option.height/2/2;
+            //TODO 需要偏移量修复 文字垂直居中问题 yeweikang20240601
+        }
+
         wordGroup.cancelLine = {};
         wordGroup.cancelLine.startX = left;
-        wordGroup.cancelLine.startY = top-asc/2+1;
+        wordGroup.cancelLine.startY = offsetY+1;
 
         wordGroup.cancelLine.endX = left + width;
-        wordGroup.cancelLine.endY = top-asc/2+1;
+        wordGroup.cancelLine.endY = offsetY+1;
 
         wordGroup.cancelLine.fs = fs;
 
     }
 
     if(underLine!="0"){
+        // debugger
          wordGroup.underLine = [];
          if(underLine=="1" || underLine=="2"){
             let item = {};

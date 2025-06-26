@@ -22,7 +22,6 @@ const gridHTML = function() {
                             }" id="luckysheet_info_detail_title" class="luckysheet_info_detail_back"> 
                                 <i style="color:#444D5A;" class="fa fa-angle-left fa-2x" aria-hidden="true"></i> 
                             </div> 
-                            <div class="luckysheet-share-logo" title="\${logotitle}"></div>
                             <div class="sheet-name"> 
                                 <input data-tips="${
                                     locale_info.tips
@@ -32,12 +31,7 @@ const gridHTML = function() {
         locale_info.rename
     }" style="visibility: visible; width: 149px;" data-tooltip="${locale_info.rename}"> 
                             </div> 
-                            <div id="luckysheet_info_detail_update" class="luckysheet_info_detail_update"> ${
-                                locale_info.detailUpdate
-                            } </div> 
-                            <div id="luckysheet_info_detail_save" class="luckysheet_info_detail_save"> ${
-                                locale_info.wait
-                            } </div>
+
                             
                             \${functionButton}
                             
@@ -1262,8 +1256,8 @@ const luckysheetlodingHTML = function(target, coverConfig) {
     if (typeof config.enable === "boolean" && config.enable === false) {
         return {
             el: "",
-            show: show,
-            close: close,
+            show: ()=>{},
+            close: ()=>{},
         };
     }
     const imageHtml = luckysheetloadingImage(config);

@@ -25,6 +25,7 @@ import { getSheetIndex } from '../methods/get';
 import Store from '../store';
 import { selectHightlightShow } from './select';
 import method from '../global/method';
+import editor from '../global/editor';
 
 function formulaHistoryHanddler(ctr, type="redo"){
     if(ctr==null){
@@ -442,6 +443,7 @@ const controlHistory = {
         let newCtr = {...ctr, ...{data: ctr.curdata, curdata: ctr.data}}
         // 钩子函数
         method.createHookFunction('updated', newCtr)
+        editor.webWorkerFlowDataCache(newCtr['curdata']);//worker存数据
         
     },
     undo: function () {

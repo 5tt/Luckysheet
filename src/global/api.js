@@ -5901,6 +5901,13 @@ export function redo(options = {}) {
     return ctr;
 }
 
+/**
+ * 清除redo和undo
+ */
+export function cleardo() {
+    Store.jfredo.splice(0,Store.jfredo.length); 
+    Store.jfundo.splice(0,Store.jfundo.length); 
+}
 
 /**
  * 返回所有工作表配置

@@ -6,6 +6,7 @@ import Store from '../store/index';
 import method from '../global/method';
 import { getluckysheetfile } from '../methods/get'
 import { toJson } from '../global/api';
+import editor from '../global/editor';
 
 let undoTimer,redoTimer;
 function undoAccessible(len) {
@@ -27,10 +28,18 @@ const initListener = function(){
         if (property !== 'length') {
             //  钩子函数
             method.createHookFunction('updated',val)
+            if(val['curdata']){
+                // debugger
+                editor.webWorkerFlowDataCache(val['curdata']);//worker存数据
+            }
         }
         undoAccessible(Store.jfredo.length);
     } );
     createProxy(Store, 'jfundo',(target, property, val, receiver)=>{
+        // if(val['data']){
+        //     debugger
+        //     editor.webWorkerFlowDataCache(val['data']);//worker存数据
+        // }
         redoAccessible(Store.jfundo.length);
     } );
     

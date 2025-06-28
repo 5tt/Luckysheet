@@ -653,7 +653,7 @@ function luckysheetDrawMain(
 
     //条件格式计算
     let cf_compute = conditionformat.getComputeMap();
-
+    
     //表格渲染区域 溢出单元格配置保存
     let cellOverflowMap = getCellOverflowMap(
         luckysheetTableContent,
@@ -1422,10 +1422,30 @@ let cellRender = function(
     let space_width = 2,
         space_height = 2; //宽高方向 间隙
 
+
+
     //水平对齐
     let horizonAlign = menuButton.checkstatus(Store.flowdata, r, c, "ht");
     //垂直对齐
     let verticalAlign = menuButton.checkstatus(Store.flowdata, r, c, "vt");
+
+
+    // if(verticalAlign == "2"){
+    //     // luckysheetTableContent.textBaseline = "bottom";
+    // }else if (verticalAlign == "0") {
+    //     // luckysheetTableContent.textBaseline = "middle";
+    //     let measureText = getMeasureText(value, luckysheetTableContent);
+    //     console.log(measureText)
+    //     let oneLineTextHeight = measureText.actualBoundingBoxDescent + measureText.actualBoundingBoxAscent;
+    //     space_height = cellHeight > oneLineTextHeight?(cellHeight - oneLineTextHeight)/2 : 2;  // yeweikang-20240601
+    // } else if (verticalAlign == "1") {
+    //     // luckysheetTableContent.textBaseline = "top";
+
+    // }
+
+    // console.log(luckysheetTableContent.textBaseline)
+    // console.log(space_height)
+
 
     //交替颜色
     let checksAF = alternateformat.checksAF(r, c, af_compute);
@@ -1748,6 +1768,7 @@ let cellRender = function(
         luckysheetTableContent.clip();
         luckysheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
 
+        // 这里会将luckysheetTableContent.baseline重新赋值  yeweikang
         let textInfo = getCellTextInfo(cell, luckysheetTableContent, {
             cellWidth: cellWidth,
             cellHeight: cellHeight,
@@ -2244,7 +2265,9 @@ function cellTextRender(textInfo, ctx, option) {
             -(pos_y + textInfo.textTopAll) / Store.zoomRatio,
         );
     }
-
+    // debugger
+    // ctx.textBaseline = "middle"; //yyyy
+    // console.log("ctx.textBaseline=" + ctx.textBaseline)
     // ctx.fillStyle = "rgb(0,0,0)";
     for (let i = 0; i < values.length; i++) {
         let word = values[i];

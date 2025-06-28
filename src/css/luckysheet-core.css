@@ -158,7 +158,7 @@
 .luckysheet_info_detail .luckysheet_info_detail_input:focus {
     -webkit-appearance: none;
     -moz-appearance: none;
-    border: 1px solid #0188fb !important;
+    border: 1px solid #020202 !important;
     -webkit-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
@@ -227,7 +227,7 @@
 }
 
 .luckysheet-wa-editor>div.luckysheetfulltoolbar:hover {
-    background: #0188fb;
+    background: #020202;
     color: #FAFAFA;
     cursor: pointer;
 }
@@ -245,7 +245,7 @@
 
 .luckysheet-toolbar-left-theme {
     width: 15px;
-    /* background: #0188fb;  */ /* 工具栏左边的蓝色背景 */
+    /* background: #020202;  */ /* 工具栏左边的蓝色背景 */
     position: absolute;
     left: 0px;
     top: 1px;
@@ -385,7 +385,7 @@
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
     background: #fff;
     outline: none;
-    border: 1px solid #0188fb !important;
+    border: 1px solid #020202 !important;
 }
 
 .luckysheet-toolbar-textinput {
@@ -801,11 +801,11 @@
 } */
 
 #luckysheet-icon-pivotTable .luckysheet-toolbar-menu-button-caption {
-    color: #0188fb;
+    color: #020202;
 }
 
 #luckysheet-icon-chart .luckysheet-toolbar-menu-button-caption {
-    color: #0188fb;
+    color: #020202;
 }
 
 .luckysheet-rightgclick-menu-sub .sp-container {
@@ -952,7 +952,7 @@
 }
 
 .luckysheet-wa-calculate-active:hover {
-    color: #0188fb;
+    color: #020202;
 }
 
 .luckysheet-grid-container {
@@ -1383,7 +1383,7 @@ div.luckysheet-sheets-m:hover {
     cursor: default;
     position: absolute;
     z-index: 10;
-    border-bottom: 1px solid #0188fb;
+    border-bottom: 1px solid #020202;
     bottom: 0;
     height: 100%;
     margin-left: 0px;
@@ -1449,7 +1449,7 @@ div.luckysheet-sheets-m:hover {
     background-color: #e1e1e1;
     display: inline-block;
     min-height: 19px;
-    color: #0188fb;
+    color: #020202;
     font-weight: bold;
     touch-action: manipulation;
     border-right-width: 1px;
@@ -1519,7 +1519,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
 .luckysheet-rows-h-selected {
     position: absolute;
     z-index: 10;
-    border-right: 1px solid #0188fb;
+    border-right: 1px solid #020202;
     right: 0;
     width: 100%;
     margin-top: 2px;
@@ -1580,7 +1580,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     border-color: #bfbfbf;
     background-color: #e1e1e1;
     border-bottom-width: 1px;
-    color: #0188fb;
+    color: #020202;
     font-weight: bold;
     touch-action: manipulation;
 }
@@ -1871,7 +1871,8 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     z-index: 14;
     /*border:1px solid #fff;*/
     margin: 0px 0 0 0px;
-    background: rgba(0, 80, 208, 0.15);
+    /* background: rgba(0, 80, 208, 0.15); */
+    background-color: transparent;  /* yeweikang20240601 */
     display: none;
     /*transition: all 0.1s;*/
 }
@@ -1931,7 +1932,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     right: 0;
     bottom: 0;
     left: 0;
-    border: 2px dashed #12a5ff;
+    border: 2px dashed #020202; /* #12a5ff */
     z-index: 8;
 }
 
@@ -1946,7 +1947,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
 
 .luckysheet-formula-functionrange-highlight .luckysheet-copy {
     background-image: none;
-    background: #0188fb;
+    background: #020202;
     position: absolute;
     z-index: 18;
     cursor: move;
@@ -2012,7 +2013,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     position: absolute;
     z-index: 19;
     border: 1px solid #fff;
-    background: #0188fb;
+    background: #020202;
     width: 6px;
     height: 6px;
 }
@@ -2021,7 +2022,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     position: absolute;
     pointer-events: none;
     z-index: 16;
-    border: 1px dashed #0188fb;
+    border: 1px dashed #020202;
     margin: -1px 0 0 -1px;
     display: none;
     /*transition: all 0.1s;*/
@@ -2031,7 +2032,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     position: absolute;
     pointer-events: none;
     z-index: 16;
-    border: 2px solid #0188fb;
+    border: 2px solid #020202;
     margin: -1px 0 0 -1px;
     display: none;
     /*transition: all 0.1s;*/
@@ -2041,11 +2042,13 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     position: absolute;
     pointer-events: none;
     z-index: 15;
-    border: 1px solid #0188fb;
+    /* border: 1px solid #020202; */
+    border: 2px solid #020202; /* yeweikang20240601 */
     margin: -1px 0 0 -1px;
-    background: rgba(1, 136, 251, 0.15);
+    /* background: rgba(1, 136, 251, 0.15); */
+    background: rgba(100, 100, 100, 0.4); /* yeweikang20240601 */
     display: none;
-    /*transition: all 0.1s;*/
+    transition: all 0.1s;
 }
 
 .luckysheet-cs-inner-border {
@@ -2064,7 +2067,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     height: 6px;
     bottom: -5px;
     cursor: crosshair;
-    background-color: #0188fb;
+    background-color: #020202;
     border: solid 1px #fff;
     z-index: 16;
     pointer-events: auto;
@@ -2157,7 +2160,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     height: 10px;
     left: 8px;
     top: 8px;
-    background-color: #018ffb;
+    background-color: #020202;
     background-position: center;
     box-sizing: border-box;
     border-radius: 50%;
@@ -2168,7 +2171,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     position: absolute;
     pointer-events: none;
     z-index: 15;
-    border: 1px solid blue;
+    border: 1px solid #020202;
     margin: -1px 0 0 -1px;
     display: none;
 }
@@ -2458,7 +2461,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
 
 .luckysheet-filter-menu .luckysheet-mousedown-filter-byvalue-btn span,
 .luckysheet-filter-menu .luckysheet-mousedown-pivotTableFilter-byvalue-btn span {
-    color: blue;
+    color: #020202;
     cursor: pointer;
     text-decoration: underline;
 }
@@ -2545,7 +2548,7 @@ body:not(.ewa-ipad) .luckysheet-rows-h-cell-sel:hover {
     right: -5px;
     font-size: 16px;
     padding-top: 0px;
-    color: blue;
+    color: #020202;
 }
 
 #luckysheet-filter-byvalue-select table,
@@ -2866,12 +2869,12 @@ fieldset[disabled] .btn-primary.active {
     background-color: #ffffff;
 }
 
-.btn-primary,
+/* .btn-primary, */
 .label-default,
 .list-group-item.active,
 .list-group-item.active:hover,
 .list-group-item.active:focus {
-    background: #0188fb;
+    background: #020202;
     /* border-color: #726EFE; */
     border-color: transparent;
 }
@@ -2960,7 +2963,7 @@ fieldset[disabled] .btn-danger.focus {
 .luckysheet-cols-change-size {
     width: 5px;
     height: 100%;
-    background: #0188fb;
+    background: #020202;
     cursor: ew-resize;
     opacity: 0;
 }
@@ -2968,13 +2971,13 @@ fieldset[disabled] .btn-danger.focus {
 .luckysheet-rows-change-size {
     width: 100%;
     height: 5px;
-    background: #0188fb;
+    background: #020202;
     cursor: ns-resize;
     opacity: 0;
 }
 
 .luckysheet-change-size-line {
-    border-color: #0188fb;
+    border-color: #020202;
     border-style: solid;
     z-index: 15;
     display: none;
@@ -3045,7 +3048,8 @@ fieldset[disabled] .btn-danger.focus {
     top: -10000px;
     max-height: 9900px;
     max-width: 9900px;
-    border: 2px #5292f7 solid;
+    /* border: 2px #5292f7 solid; */ /*yeweikang20240601*/
+    border: 2px #020202 solid;
     padding: 0 2px;
     margin: 0;
     z-index: 15;
@@ -3054,9 +3058,9 @@ fieldset[disabled] .btn-danger.focus {
     overflow: initial;
     white-space: pre-wrap;
     outline: none;
-    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    /* -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); */
     word-wrap: break-word;
 }
 
@@ -3167,7 +3171,7 @@ fieldset[disabled] .btn-danger.focus {
 
          .luckysheet-modal-dialog-title-update {
              right: 105px;
-             color:#0188fb;
+             color:#020202;
              font-size:14px;
              padding-top: 9px;
          }
@@ -3187,7 +3191,7 @@ fieldset[disabled] .btn-danger.focus {
 
 .luckysheet-modal-dialog-resize {
     position: absolute;
-    border: 2px solid #0188fb;
+    border: 2px solid #020202;
     margin: 0px;
     padding: 0px;
     top: -2px;
@@ -3202,7 +3206,7 @@ fieldset[disabled] .btn-danger.focus {
     height: 6px;
     width: 6px;
     background: #ffffff;
-    border: 2px solid #0188fb;
+    border: 2px solid #020202;
     pointer-events: all;
     border-radius: 6px;
 }
@@ -3292,13 +3296,13 @@ fieldset[disabled] .btn-danger.focus {
 
 .luckysheet-modal-controll-btn:hover {
     border: 1px solid #a1a1a1;
-    color: #0188fb;
+    color: #020202;
 }
 
 .luckysheet-modal-controll-btn:active {
     border: 1px solid #bbbbbb;
     background: #efefef;
-    color: #0188fb;
+    color: #020202;
 }
 
 .luckysheet-modal-controll-del {
@@ -3324,7 +3328,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-modal-controll-max-close:hover {
-    background: #0188fb;
+    background: #020202;
     cursor: pointer;
 }
 
@@ -3400,11 +3404,11 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-filter-options {
-    color: #897bff;
+    color: #020202; /* 897bff */
     cursor: pointer;
     position: absolute;
     z-index: 20;
-    border: 1px solid #897bff;
+    border: 1px solid #020202;
     border-radius: 3px;
     top: 3px;
     margin-left: 0px;
@@ -3419,13 +3423,13 @@ fieldset[disabled] .btn-danger.focus {
 .luckysheet-filter-options:hover {
     color: #fff;
     border: 1px solid #fff;
-    background: #897bff;
+    background: #020202;
 }
 
 .luckysheet-filter-options-active {
     color: #fff;
-    border: 1px solid #897bff;
-    background: #897bff;
+    border: 1px solid #020202;
+    background: #020202;
 }
 
 .luckysheet-flat-menu-button {
@@ -4136,7 +4140,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-chart-point-config-left-mid span {
-    color: blue;
+    color: #020202;
     cursor: pointer;
     text-decoration: underline;
     font-size: 12px;
@@ -4371,7 +4375,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-modal-dialog-slider-range > div:last-child {
-    color: blue;
+    color: #020202;
     cursor: pointer;
     float: left;
 }
@@ -4555,7 +4559,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-modal-dialog-slider-config-list .luckysheet-modal-dialog-slider-config-item:hover {
-    border: 1px solid #0188fb;
+    border: 1px solid #020202;
     background: #5f9afc;
 }
 
@@ -4634,7 +4638,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 #luckysheet-dialog-pivotTable-clearitem {
-    color: blue;
+    color: #020202;
     cursor: pointer;
     float: right;
     margin-right: 30px;
@@ -5005,51 +5009,51 @@ fieldset[disabled] .btn-danger.focus {
           .2em:外扩.2em
           #FFF:白色
          */ 0 -3em
-                0 0.2em #0188fb,
-            /*上*/ 2em -2em 0 0 #0188fb, /*右上*/ 3em 0 0 -0.5em #0188fb, /*右*/ 2em 2em 0 -0.5em #0188fb,
-            /*右下*/ 0 3em 0 -0.5em #0188fb, /*下*/ -2em 2em 0 -0.5em #0188fb, /*左下*/ -3em 0 0 -0.5em #0188fb,
-            /*左*/ -2em -2em 0 0 #0188fb;
+                0 0.2em #020202,
+            /*上*/ 2em -2em 0 0 #020202, /*右上*/ 3em 0 0 -0.5em #020202, /*右*/ 2em 2em 0 -0.5em #020202,
+            /*右下*/ 0 3em 0 -0.5em #020202, /*下*/ -2em 2em 0 -0.5em #020202, /*左下*/ -3em 0 0 -0.5em #020202,
+            /*左*/ -2em -2em 0 0 #020202;
         /*左上*/
     }
 
     12.5% {
-        box-shadow: 0 -3em 0 0 #0188fb, 2em -2em 0 0.2em #0188fb, 3em 0 0 0 #0188fb, 2em 2em 0 -0.5em #0188fb,
-            0 3em 0 -0.5em #0188fb, -2em 2em 0 -0.5em #0188fb, -3em 0 0 -0.5em #0188fb, -2em -2em 0 -0.5em #0188fb;
+        box-shadow: 0 -3em 0 0 #020202, 2em -2em 0 0.2em #020202, 3em 0 0 0 #020202, 2em 2em 0 -0.5em #020202,
+            0 3em 0 -0.5em #020202, -2em 2em 0 -0.5em #020202, -3em 0 0 -0.5em #020202, -2em -2em 0 -0.5em #020202;
     }
 
     25% {
-        box-shadow: 0 -3em 0 -0.5em #0188fb, 2em -2em 0 0 #0188fb, 3em 0 0 0.2em #0188fb, 2em 2em 0 0 #0188fb,
-            0 3em 0 -0.5em #0188fb, -2em 2em 0 -0.5em #0188fb, -3em 0 0 -0.5em #0188fb, -2em -2em 0 -0.5em #0188fb;
+        box-shadow: 0 -3em 0 -0.5em #020202, 2em -2em 0 0 #020202, 3em 0 0 0.2em #020202, 2em 2em 0 0 #020202,
+            0 3em 0 -0.5em #020202, -2em 2em 0 -0.5em #020202, -3em 0 0 -0.5em #020202, -2em -2em 0 -0.5em #020202;
     }
 
     37.5% {
-        box-shadow: 0 -3em 0 -0.5em #0188fb, 2em -2em 0 -0.5em #0188fb, 3em 0 0 0 #0188fb, 2em 2em 0 0.2em #0188fb,
-            0 3em 0 0 #0188fb, -2em 2em 0 -0.5em #0188fb, -3em 0 0 -0.5em #0188fb, -2em -2em 0 -0.5em #0188fb;
+        box-shadow: 0 -3em 0 -0.5em #020202, 2em -2em 0 -0.5em #020202, 3em 0 0 0 #020202, 2em 2em 0 0.2em #020202,
+            0 3em 0 0 #020202, -2em 2em 0 -0.5em #020202, -3em 0 0 -0.5em #020202, -2em -2em 0 -0.5em #020202;
     }
 
     50% {
-        box-shadow: 0 -3em 0 -0.5em #0188fb, 2em -2em 0 -0.5em #0188fb, 3em 0 0 -0.5em #0188fb, 2em 2em 0 0 #0188fb,
-            0 3em 0 0.2em #0188fb, -2em 2em 0 0 #0188fb, -3em 0 0 -0.5em #0188fb, -2em -2em 0 -0.5em #0188fb;
+        box-shadow: 0 -3em 0 -0.5em #020202, 2em -2em 0 -0.5em #020202, 3em 0 0 -0.5em #020202, 2em 2em 0 0 #020202,
+            0 3em 0 0.2em #020202, -2em 2em 0 0 #020202, -3em 0 0 -0.5em #020202, -2em -2em 0 -0.5em #020202;
     }
 
     62.5% {
-        box-shadow: 0 -3em 0 -0.5em #0188fb, 2em -2em 0 -0.5em #0188fb, 3em 0 0 -0.5em #0188fb, 2em 2em 0 -0.5em #0188fb,
-            0 3em 0 0 #0188fb, -2em 2em 0 0.2em #0188fb, -3em 0 0 0 #0188fb, -2em -2em 0 -0.5em #0188fb;
+        box-shadow: 0 -3em 0 -0.5em #020202, 2em -2em 0 -0.5em #020202, 3em 0 0 -0.5em #020202, 2em 2em 0 -0.5em #020202,
+            0 3em 0 0 #020202, -2em 2em 0 0.2em #020202, -3em 0 0 0 #020202, -2em -2em 0 -0.5em #020202;
     }
 
     75% {
-        box-shadow: 0 -3em 0 -0.5em #0188fb, 2em -2em 0 -0.5em #0188fb, 3em 0 0 -0.5em #0188fb, 2em 2em 0 -0.5em #0188fb,
-            0 3em 0 -0.5em #0188fb, -2em 2em 0 0 #0188fb, -3em 0 0 0.2em #0188fb, -2em -2em 0 0 #0188fb;
+        box-shadow: 0 -3em 0 -0.5em #020202, 2em -2em 0 -0.5em #020202, 3em 0 0 -0.5em #020202, 2em 2em 0 -0.5em #020202,
+            0 3em 0 -0.5em #020202, -2em 2em 0 0 #020202, -3em 0 0 0.2em #020202, -2em -2em 0 0 #020202;
     }
 
     87.5% {
-        box-shadow: 0 -3em 0 0 #0188fb, 2em -2em 0 -0.5em #0188fb, 3em 0 0 -0.5em #0188fb, 2em 2em 0 -0.5em #0188fb,
-            0 3em 0 -0.5em #0188fb, -2em 2em 0 0 #0188fb, -3em 0 0 0 #0188fb, -2em -2em 0 0.2em #0188fb;
+        box-shadow: 0 -3em 0 0 #020202, 2em -2em 0 -0.5em #020202, 3em 0 0 -0.5em #020202, 2em 2em 0 -0.5em #020202,
+            0 3em 0 -0.5em #020202, -2em 2em 0 0 #020202, -3em 0 0 0 #020202, -2em -2em 0 0.2em #020202;
     }
 
     100% {
-        box-shadow: 0 -3em 0 0.2em #0188fb, 2em -2em 0 0 #0188fb, 3em 0 0 -0.5em #0188fb, 2em 2em 0 -0.5em #0188fb,
-            0 3em 0 -0.5em #0188fb, -2em 2em 0 -0.5em #0188fb, -3em 0 0 -0.5em #0188fb, -2em -2em 0 0 #0188fb;
+        box-shadow: 0 -3em 0 0.2em #020202, 2em -2em 0 0 #020202, 3em 0 0 -0.5em #020202, 2em 2em 0 -0.5em #020202,
+            0 3em 0 -0.5em #020202, -2em 2em 0 -0.5em #020202, -3em 0 0 -0.5em #020202, -2em -2em 0 0 #020202;
     }
 }
 
@@ -6407,7 +6411,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 .luckysheet-postil-show-active .luckysheet-postil-dialog-move .luckysheet-postil-dialog-move-item {
-    border-color: #0188fb;
+    border-color: #020202;
 }
 
 .luckysheet-postil-dialog-resize {
@@ -6425,7 +6429,7 @@ fieldset[disabled] .btn-danger.focus {
     position: absolute;
     height: 6px;
     width: 6px;
-    border: 1px solid #0188fb;
+    border: 1px solid #020202;
     pointer-events: all;
 }
 
@@ -7209,6 +7213,7 @@ fieldset[disabled] .btn-danger.focus {
     position: absolute;
     z-index: 10000;
     box-sizing: border-box;
+    color: #213547;
 }
 #luckysheet-dataVerification-dropdown-List .dropdown-List-item {
     padding: 5px 10px;

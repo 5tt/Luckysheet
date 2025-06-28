@@ -124,6 +124,11 @@ function jfrefreshgrid(data, range, allParam, isRunExecFunction = true, isRefres
     //Store.flowdata
     Store.flowdata = data;
     editor.webWorkerFlowDataCache(Store.flowdata);//worker存数据
+    // // 如果变量d就是editor.deepCopyFlowDataCache,则不用再拷贝变量，因为updated事件是异步的，拷贝会使updated事件中改变curdata变量使其无效。
+    // if( data !== editor.deepCopyFlowDataCache){
+    //     editor.webWorkerFlowDataCache(Store.flowdata);//worker存数据
+    // }
+    
     file.data = Store.flowdata;
 
     // 必须要处理，可能之前的config为空，则也需要清空

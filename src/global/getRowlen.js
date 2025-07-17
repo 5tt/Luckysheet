@@ -1464,7 +1464,13 @@ function getCellTextInfo(cell , ctx, option){
 
                             top = (cellHeight - space_height)  + cumWordHeight +size.asc-textH_all;
                             if(verticalAlign == "0"){
-                                top = cellHeight / 2 + cumWordHeight - textH_all/2 + size.asc;
+                                if(cellHeight > textH_all){
+                                    // 行高大于文本高度，居中对齐
+                                    top = cellHeight / 2 + cumWordHeight - textH_all/2 + size.asc;
+                                }else{
+                                    // 行高小于等于文本高度，上对齐
+                                    top = space_height  + cumWordHeight + size.asc;
+                                }
                             }
                             else if(verticalAlign == "1"){
                                 top = space_height  + cumWordHeight+ size.asc;

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rg -n \"function chatatABC\\|chatatABC.*function\\|chatatABC.*=\" src/utils/util.js)",
+      "Bash(npm run dev)",
+      "Bash(npm install)",
+      "Bash(npm run build)"
+    ],
+    "deny": []
+  }
+}

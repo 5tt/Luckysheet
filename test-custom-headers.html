@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Luckysheet自定义列标题测试</title>
+    <link rel='stylesheet' href='./dist/luckysheet.css' />
+    <script src="./dist/luckysheet.umd.js"></script>
+</head>
+<body>
+    <div id="luckysheet" style="margin:0px;padding:0px;position:absolute;width:100%;height:100%;left: 0px;top: 0px;"></div>
+
+    <script>
+        // 测试1：使用数组格式自定义列标题
+        luckysheet.create({
+            container: 'luckysheet',
+            showtoolbar: true,
+            showinfobar: false,
+            showsheetbar: false,
+            customColumnHeaders: ['编号', '姓名', '年龄', '性别', '部门', '职位', '工资', '入职日期']
+        });
+
+        // 测试2：使用对象格式自定义列标题（可选）
+        // luckysheet.create({
+        //     container: 'luckysheet',
+        //     showtoolbar: true,
+        //     showinfobar: false,
+        //     showsheetbar: false,
+        //     customColumnHeaders: {
+        //         0: '产品ID',
+        //         1: '产品名称',
+        //         2: '价格',
+        //         3: '库存',
+        //         4: '类别',
+        //         5: '供应商',
+        //         6: '描述',
+        //         7: '创建日期'
+        //     }
+        // });
+
+        // 测试3：混合使用（部分自定义，其余使用默认）
+        // luckysheet.create({
+        //     container: 'luckysheet',
+        //     showtoolbar: true,
+        //     showinfobar: false,
+        //     showsheetbar: false,
+        //     customColumnHeaders: {
+        //         0: '自定义A',
+        //         1: '自定义B',
+        //         2: '自定义C'
+        //         // 其余列将使用默认的D, E, F...
+        //     }
+        // });
+    </script>
+</body>
+</html>

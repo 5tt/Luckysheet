@@ -61,6 +61,7 @@ export default {
     limitSheetNameLength:true,    //是否限制工作表名的长度
     defaultSheetNameMaxLength:31,  //默认工作表名称的最大长度
     sheetFormulaBar:true, //是否显示公式栏
+    customColumnHeaders: null, //自定义列标题，可以是数组或对象，如['编号', '姓名', '年龄']或{0: '编号', 1: '姓名'}
     showtoolbarConfig:{}, //自定义工具栏
     showsheetbarConfig:{}, //自定义底部sheet页
     showstatisticBarConfig:{}, //自定义计数栏

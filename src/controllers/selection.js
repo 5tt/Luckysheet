@@ -16,6 +16,7 @@ import { replaceHtml, getObjType, luckysheetfontformat } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
+import method from "../global/method";
 
 const selection = {
     clearcopy: function(e) {
@@ -816,6 +817,9 @@ const selection = {
                 jfrefreshgrid(d, Store.luckysheet_select_save, allParam);
                 selectHightlightShow();
             }
+            
+            // hook
+            method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, data, data);
         } else {
             data = data.replace(/\r/g, "");
             let dataChe = [];
@@ -912,6 +916,9 @@ const selection = {
                 jfrefreshgrid(d, Store.luckysheet_select_save);
                 selectHightlightShow();
             }
+            
+            // hook
+            method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, data, data);
         }
     },
     pasteHandlerOfCutPaste: function(copyRange) {
@@ -1394,6 +1401,9 @@ const selection = {
         } else {
             jfrefreshgrid_pastcut(source, target, copyRowlChange);
         }
+        
+        // hook
+        method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, copyRange, copyRange);
     },
     pasteHandlerOfCopyPaste: function(copyRange) {
         if (!checkProtectionLockedRangeList(Store.luckysheet_select_save, Store.currentSheetIndex)) {
@@ -2051,6 +2061,9 @@ const selection = {
 
             selectHightlightShow();
         }
+        
+        // hook
+        method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, copyRange, copyRange);
     },
     matchcopy: function(data1, data2) {
         let data1cache = [],

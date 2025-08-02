@@ -189,6 +189,9 @@
 							// console.info('rangePasteBefore',range,data)
 							// return false; //Can intercept paste
 						},
+						rangePasteAfter: function (range, originData, pasteData) {
+							console.info('rangePasteAfter', range, originData, pasteData)
+						},
 						rangeDeleteBefore: function (range, data) {
 							console.dir(111)
 						},

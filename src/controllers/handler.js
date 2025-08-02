@@ -6066,8 +6066,14 @@ export default function luckysheetHandler() {
                 } else {
                     selection.pasteHandlerOfCopyPaste(Store.luckysheet_copy_save);
                 }
+                
+                // hook
+                method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, Store.luckysheet_copy_save, txtdata);
             } else if (txtdata.indexOf("luckysheet_copy_action_image") > -1) {
                 imageCtrl.pasteImgItem();
+                
+                // hook
+                method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, null, txtdata);
             } else {
                 if (txtdata.indexOf("table") > -1) {
                     $("#luckysheet-copy-content").html(txtdata);
@@ -6322,6 +6328,9 @@ export default function luckysheetHandler() {
                     Store.luckysheet_selection_range = [];
                     selection.pasteHandler(data, borderInfo);
                     $("#luckysheet-copy-content").empty();
+                    
+                    // hook
+                    method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, data, txtdata);
                 }
 
                 //复制的是图片
@@ -6332,6 +6341,9 @@ export default function luckysheetHandler() {
                 } else {
                     txtdata = clipboardData.getData("text/plain");
                     selection.pasteHandler(txtdata);
+                    
+                    // hook
+                    method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, txtdata, txtdata);
                 }
                 $("#luckysheet-copy-content").empty();
             }

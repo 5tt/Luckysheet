@@ -1,47 +1,44 @@
-import Store from "../store";
-import { replaceHtml, getObjType, chatatABC, luckysheetactiveCell } from "../utils/util";
-import { getSheetIndex, getluckysheet_select_save, getluckysheetfile } from "../methods/get";
-import locale from "../locale/locale";
-import method from './method';
-import formula from './formula';
-import func_methods from "./func_methods";
-import tooltip from "./tooltip";
-import json from "./json";
-import editor from "./editor";
-import luckysheetformula from './formula';
-import cleargridelement from './cleargridelement';
-import { genarate, update } from './format';
-import { setAccuracy,setcellvalue } from "./setdata";
-import { orderbydata } from "./sort";
-import { rowlenByRange } from "./getRowlen";
-import { getdatabyselection, getcellvalue } from "./getdata";
-import { luckysheetrefreshgrid, jfrefreshgrid, jfrefreshgrid_rhcw } from "./refresh";
-import { luckysheetDeleteCell, luckysheetextendtable, luckysheetdeletetable } from "./extend";
-import { isRealNull, valueIsError, isRealNum, isEditMode, hasPartMC } from "./validate";
-import { isdatetime, diff } from "./datecontroll";
-import { getBorderInfoCompute } from './border';
-import { luckysheetDrawMain } from './draw';
-import pivotTable from '../controllers/pivotTable';
-import server from "../controllers/server";
-import menuButton from '../controllers/menuButton';
-import selection from "../controllers/selection";
-import luckysheetConfigsetting from "../controllers/luckysheetConfigsetting";
-import luckysheetFreezen from "../controllers/freezen";
-import luckysheetsizeauto from '../controllers/resize';
-import sheetmanage from '../controllers/sheetmanage';
-import conditionformat from '../controllers/conditionformat';
-import { luckysheet_searcharray } from "../controllers/sheetSearch";
-import { selectHightlightShow, selectIsOverlap } from '../controllers/select';
-import { sheetHTML, luckysheetdefaultstyle } from '../controllers/constant';
-import { createFilterOptions } from '../controllers/filter';
-import controlHistory from '../controllers/controlHistory';
-import { zoomRefreshView, zoomNumberDomBind } from '../controllers/zoom';
-import dataVerificationCtrl from "../controllers/dataVerificationCtrl";
-import imageCtrl from '../controllers/imageCtrl';
 import dayjs from "dayjs";
-import {getRangetxt } from '../methods/get';
-import {luckysheetupdateCell} from '../controllers/updateCell';
+import conditionformat from '../controllers/conditionformat';
+import { luckysheetdefaultstyle, sheetHTML } from '../controllers/constant';
+import controlHistory from '../controllers/controlHistory';
+import dataVerificationCtrl from "../controllers/dataVerificationCtrl";
+import { createFilterOptions } from '../controllers/filter';
+import luckysheetFreezen from "../controllers/freezen";
+import imageCtrl from '../controllers/imageCtrl';
+import luckysheetConfigsetting from "../controllers/luckysheetConfigsetting";
+import menuButton from '../controllers/menuButton';
+import pivotTable from '../controllers/pivotTable';
+import luckysheetsizeauto from '../controllers/resize';
 import luckysheetSearchReplace from "../controllers/searchReplace";
+import { selectHightlightShow, selectIsOverlap } from '../controllers/select';
+import selection from "../controllers/selection";
+import server from "../controllers/server";
+import { luckysheet_searcharray } from "../controllers/sheetSearch";
+import sheetmanage from '../controllers/sheetmanage';
+import { luckysheetupdateCell } from '../controllers/updateCell';
+import { zoomNumberDomBind, zoomRefreshView } from '../controllers/zoom';
+import locale from "../locale/locale";
+import { getRangetxt, getSheetIndex, getluckysheetfile } from "../methods/get";
+import { createCellEditUndoRecord, createFormatUndoRecord, createResizeColumnUndoRecord, createResizeRowUndoRecord, createUndoRecord } from "../methods/undo";
+import Store from "../store";
+import { chatatABC, getObjType, luckysheetactiveCell, replaceHtml } from "../utils/util";
+import { getBorderInfoCompute } from './border';
+import cleargridelement from './cleargridelement';
+import { diff, isdatetime } from "./datecontroll";
+import { luckysheetDrawMain } from './draw';
+import editor from "./editor";
+import { luckysheetDeleteCell, luckysheetdeletetable, luckysheetextendtable } from "./extend";
+import { default as formula, default as luckysheetformula } from './formula';
+import func_methods from "./func_methods";
+import { rowlenByRange } from "./getRowlen";
+import { getcellvalue, getdatabyselection } from "./getdata";
+import method from './method';
+import { jfrefreshgrid, jfrefreshgrid_rhcw, luckysheetrefreshgrid } from "./refresh";
+import { setcellvalue } from "./setdata";
+import { orderbydata } from "./sort";
+import tooltip from "./tooltip";
+import { hasPartMC, isEditMode, isRealNull, isRealNum } from "./validate";
 
 const IDCardReg = /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i;
 
@@ -6956,3 +6953,53 @@ export function openSearchDialog(source = 1){
     luckysheetSearchReplace.init();
     $("#luckysheet-search-replace #searchInput input").focus();
 }
+
+/**
+ * 创建撤销记录的通用方法
+ * @param {String} type 操作类型，如 "resize", "format", "edit" 等
+ * @param {String} ctrlType 具体控制类型，如 "resizeR", "resizeC", "cellEdit" 等
+ * @param {Function} operation 要执行的操作函数，接收参数并执行具体逻辑
+ * @param {Object} params 传递给操作函数的参数
+ * @param {Object} options 可选配置
+ * @param {Number} options.sheetIndex 工作表索引，默认为当前工作表
+ * @param {Boolean} options.saveImages 是否保存图片状态，默认为true
+ * @returns {*} 返回操作函数的执行结果
+ */
+export { createUndoRecord };
+
+/**
+ * 创建调整行高的撤销记录
+ * @param {Function} resizeOperation 调整行高的具体操作函数
+ * @param {Object} params 操作参数
+ * @param {Object} options 可选配置
+ * @returns {*} 返回操作函数的执行结果
+ */
+    export { createResizeRowUndoRecord };
+
+/**
+ * 创建调整列宽的撤销记录
+ * @param {Function} resizeOperation 调整列宽的具体操作函数
+ * @param {Object} params 操作参数
+ * @param {Object} options 可选配置
+ * @returns {*} 返回操作函数的执行结果
+ */
+    export { createResizeColumnUndoRecord };
+
+/**
+ * 创建单元格编辑的撤销记录
+ * @param {Function} editOperation 编辑操作函数
+ * @param {Object} params 操作参数
+ * @param {Object} options 可选配置
+ * @returns {*} 返回操作函数的执行结果
+ */
+    export { createCellEditUndoRecord };
+
+/**
+ * 创建格式化的撤销记录
+ * @param {Function} formatOperation 格式化操作函数
+ * @param {Object} params 操作参数
+ * @param {Object} options 可选配置
+ * @returns {*} 返回操作函数的执行结果
+ */
+    export { createFormatUndoRecord };
+

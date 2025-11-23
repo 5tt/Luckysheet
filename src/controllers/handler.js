@@ -6010,7 +6010,7 @@ export default function luckysheetHandler() {
 
                         let v;
                         if (cell != null) {
-                            if (cell.ct != null && cell.ct.fa.indexOf("w") > -1) {
+                            if (cell.ct != null && cell.ct.fa !=null && cell.ct.fa.indexOf("w") > -1) {
                                 v = d[r][c].v;
                             } else {
                                 v = d[r][c].m;

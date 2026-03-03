@@ -6036,12 +6036,33 @@ export default function luckysheetHandler() {
                                 break;
                             }
                         } else {
-                            if (cpDataArr[r - copy_r1][c - copy_c1] != v) {
+                            // 统一处理换行符：将换行符替换为空格后再比较
+                            // HTML中的换行符可能被转换为空格，而内部数据保留\n
+                            let normalizedCpValue = cpDataArr[r - copy_r1][c - copy_c1]
+                                .replace(/\r\n/g, " ")
+                                .replace(/\n/g, " ")
+                                .replace(/\r/g, " ")
+                                .replace(/\s+/g, " ");  // 压缩多个连续空格为单个空格
+
+                            let normalizedV = v
+                                .replace(/\r\n/g, " ")
+                                .replace(/\n/g, " ")
+                                .replace(/\r/g, " ")
+                                .replace(/\s+/g, " ");  // 压缩多个连续空格为单个空格
+
+                            if (normalizedCpValue != normalizedV) {
+                                // 数据不一致时输出日志，方便排查
+                                console.log('[PasteCompare] 数据不匹配 位置:', r, c);
+                                console.log('[PasteCompare] 剪贴板原始值:', JSON.stringify(cpDataArr[r - copy_r1][c - copy_c1]));
+                                console.log('[PasteCompare] 存储原始值:', JSON.stringify(v));
+                                console.log('[PasteCompare] 标准化剪贴板:', JSON.stringify(normalizedCpValue));
+                                console.log('[PasteCompare] 标准化存储:', JSON.stringify(normalizedV));
                                 isEqual = false;
                                 break;
                             }
                         }
                     }
+                    if (!isEqual) break;
                 }
             }
 
@@ -6052,13 +6073,18 @@ export default function luckysheetHandler() {
                 return;
             }
 
-            if (
-                txtdata.indexOf("luckysheet_copy_action_table") > -1 &&
-                Store.luckysheet_copy_save["copyRange"] != null &&
-                Store.luckysheet_copy_save["copyRange"].length > 0 &&
-                isEqual
-            ) {
+            const hasLuckyTable = txtdata.indexOf("luckysheet_copy_action_table") > -1;
+            const hasCopyRange = Store.luckysheet_copy_save["copyRange"] != null &&
+                               Store.luckysheet_copy_save["copyRange"].length > 0;
+
+            // 输出关键判断日志
+            if (hasLuckyTable && hasCopyRange) {
+                console.log('[PasteFlow] 内部粘贴判断: hasLuckyTable=true, hasCopyRange=true, isEqual=' + isEqual);
+            }
+
+            if (hasLuckyTable && hasCopyRange && isEqual) {
                 //剪切板内容 和 luckysheet本身复制的内容 一致
+                console.log('[PasteFlow] 执行内部粘贴逻辑');
                 if (Store.luckysheet_paste_iscut) {
                     Store.luckysheet_paste_iscut = false;
                     selection.pasteHandlerOfCutPaste(Store.luckysheet_copy_save);
@@ -6070,11 +6096,15 @@ export default function luckysheetHandler() {
                 // hook
                 method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, Store.luckysheet_copy_save, txtdata);
             } else if (txtdata.indexOf("luckysheet_copy_action_image") > -1) {
+                console.log('[PasteFlow] 执行图片粘贴逻辑');
                 imageCtrl.pasteImgItem();
                 
                 // hook
                 method.createHookFunction("rangePasteAfter", Store.luckysheet_select_save, null, txtdata);
             } else {
+                if (hasLuckyTable && hasCopyRange && !isEqual) {
+                    console.log('[PasteFlow] 数据不一致，降级为外部粘贴逻辑（datachange）');
+                }
                 if (txtdata.indexOf("table") > -1) {
                     $("#luckysheet-copy-content").html(txtdata);
 

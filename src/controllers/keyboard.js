@@ -612,7 +612,7 @@ export function keyboardInitial(){
                     return;
                 }
                 else if (kcode == 88) {//Ctrl + X  剪切
-                    //复制时存在格式刷状态，取消格式刷
+                    // 复制时存在格式刷状态，取消格式刷
                     if(menuButton.luckysheetPaintModelOn){
                         menuButton.cancelPaintModel();
                     }
@@ -621,7 +621,7 @@ export function keyboardInitial(){
                         return;
                     }
 
-                    //复制范围内包含部分合并单元格，提示
+                    // 复制范围内包含部分合并单元格，提示
                     if(Store.config["merge"] != null){
                         let has_PartMC = false;
 
@@ -649,7 +649,7 @@ export function keyboardInitial(){
                         }
                     }
 
-                    //多重选区时 提示
+                    // 多重选区时 提示
                     if(Store.luckysheet_select_save.length > 1){
                         if(isEditMode()){
                             alert(locale_drag.noMulti);

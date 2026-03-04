@@ -6050,15 +6050,23 @@ export default function luckysheetHandler() {
                                 .replace(/\r/g, " ")
                                 .replace(/\s+/g, " ");  // 压缩多个连续空格为单个空格
 
-                            if (normalizedCpValue != normalizedV) {
-                                // 数据不一致时输出日志，方便排查
+                            // 允许源单元格为空的情况（剪切后再次粘贴）
+                            const isSourceEmpty = normalizedV === "" || normalizedV === null || normalizedV === undefined;
+                            const isMatch = normalizedCpValue === normalizedV;
+
+                            if (!isMatch && !isSourceEmpty) {
+                                // 数据不一致且源单元格不为空时输出日志，方便排查
                                 console.log('[PasteCompare] 数据不匹配 位置:', r, c);
                                 console.log('[PasteCompare] 剪贴板原始值:', JSON.stringify(cpDataArr[r - copy_r1][c - copy_c1]));
                                 console.log('[PasteCompare] 存储原始值:', JSON.stringify(v));
                                 console.log('[PasteCompare] 标准化剪贴板:', JSON.stringify(normalizedCpValue));
                                 console.log('[PasteCompare] 标准化存储:', JSON.stringify(normalizedV));
+                                console.log('[PasteCompare] 源单元格为空:', isSourceEmpty);
                                 isEqual = false;
                                 break;
+                            } else if (!isMatch && isSourceEmpty) {
+                                // 源单元格为空但剪贴板有内容，这是剪切后再次粘贴的正常情况
+                                console.log('[PasteCompare] 源单元格已空(剪切后)，继续内部粘贴 位置:', r, c);
                             }
                         }
                     }

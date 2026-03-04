@@ -5996,15 +5996,22 @@ export default function luckysheetHandler() {
                     d = Store.luckysheetfile[getSheetIndex(copy_index)].data;
                 }
 
+                console.log('[PasteCompare] 开始比较数据 复制范围:', copy_r1, copy_r2, copy_c1, copy_c2);
+                console.log('[PasteCompare] 剪贴板数据行数:', cpDataArr.length);
+
                 for (let r = copy_r1; r <= copy_r2; r++) {
                     if (r - copy_r1 > cpDataArr.length - 1) {
+                        console.log('[PasteCompare] 行数不匹配，结束比较');
                         break;
                     }
 
                     for (let c = copy_c1; c <= copy_c2; c++) {
                         let cell = d[r][c];
                         let isInlineStr = false;
+
+                        // 合并单元格非主单元格跳过
                         if (cell != null && cell.mc != null && cell.mc.rs == null) {
+                            console.log('[PasteCompare] 跳过合并单元格子单元格 位置:', r, c);
                             continue;
                         }
 
@@ -6026,14 +6033,26 @@ export default function luckysheetHandler() {
                         if (v == null) {
                             v = "";
                         }
+
+                        const cpValue = cpDataArr[r - copy_r1][c - copy_c1] ?? "";
+
                         if (isInlineStr) {
-                            const cpData = $(cpDataArr[r - copy_r1][c - copy_c1])
-                                .text()
-                                .replace(/\s|\n/g, " ");
-                            const storeValue = v.replace(/\n/g, "").replace(/\s/g, " ");
-                            if (cpData != storeValue) {
+                            // 内联字符串处理
+                            const normalizedCp = $(cpValue).text().replace(/[\s\n]/g, " ").trim();
+                            const normalizedV = v.replace(/[\n\s]/g, " ").trim();
+
+                            // 允许源单元格为空的情况（剪切后再次粘贴）
+                            const isSourceEmpty = !normalizedV || normalizedV === "";
+                            const isMatch = normalizedCp === normalizedV;
+
+                            if (!isMatch && !isSourceEmpty) {
+                                console.log('[PasteCompare] 内联字符串不匹配 位置:', r, c);
+                                console.log('[PasteCompare] 剪贴板值:', JSON.stringify(cpValue.substring(0, 50)));
+                                console.log('[PasteCompare] 存储值:', JSON.stringify(v.substring(0, 50)));
                                 isEqual = false;
                                 break;
+                            } else if (!isMatch && isSourceEmpty) {
+                                console.log('[PasteCompare] 内联字符串源单元格已空，继续 位置:', r, c);
                             }
                         } else {
                             // 统一处理换行符：将换行符替换为空格后再比较
@@ -6070,8 +6089,14 @@ export default function luckysheetHandler() {
                             }
                         }
                     }
-                    if (!isEqual) break;
+                    if (!isEqual) {
+                        console.log('[PasteCompare] 设置 isEqual=false 位置:', r, c);
+                        break;
+                    }
                 }
+                console.log('[PasteCompare] 比较完成 最终isEqual:', isEqual);
+            } else {
+                console.log('[PasteCompare] 未进入比较逻辑 hasLuckyTable:', txtdata.indexOf("luckysheet_copy_action_table") > -1, 'copyRange:', Store.luckysheet_copy_save["copyRange"]);
             }
 
             const locale_fontjson = locale().fontjson;

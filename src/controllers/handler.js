@@ -6038,8 +6038,23 @@ export default function luckysheetHandler() {
 
                         if (isInlineStr) {
                             // 内联字符串处理
-                            const normalizedCp = $(cpValue).text().replace(/[\s\n]/g, " ").trim();
-                            const normalizedV = v.replace(/[\n\s]/g, " ").trim();
+                            // 将所有<br>标签（含带属性的如<br style="...">）替换为空格
+                            // 否则$(html).text()会丢弃<br>导致文本直接拼接无分隔
+                            const cpHtmlWithSpaces = cpValue.replace(/<br\b[^>]*\/?>/gi, " ");
+                            console.log('[PasteCompare] 内联原始HTML:', JSON.stringify(cpValue.substring(0, 200)));
+                            const extractedText = $(cpHtmlWithSpaces).text();
+                            const normalizedCp = extractedText
+                                .replace(/\r\n/g, " ")
+                                .replace(/\n/g, " ")
+                                .replace(/\r/g, " ")
+                                .replace(/\s+/g, " ")
+                                .trim();
+                            const normalizedV = v
+                                .replace(/\r\n/g, " ")
+                                .replace(/\n/g, " ")
+                                .replace(/\r/g, " ")
+                                .replace(/\s+/g, " ")
+                                .trim();
 
                             // 允许源单元格为空的情况（剪切后再次粘贴）
                             const isSourceEmpty = !normalizedV || normalizedV === "";
@@ -6047,8 +6062,8 @@ export default function luckysheetHandler() {
 
                             if (!isMatch && !isSourceEmpty) {
                                 console.log('[PasteCompare] 内联字符串不匹配 位置:', r, c);
-                                console.log('[PasteCompare] 剪贴板值:', JSON.stringify(cpValue.substring(0, 50)));
-                                console.log('[PasteCompare] 存储值:', JSON.stringify(v.substring(0, 50)));
+                                console.log('[PasteCompare] 标准化剪贴板:', JSON.stringify(normalizedCp.substring(0, 200)));
+                                console.log('[PasteCompare] 标准化存储:', JSON.stringify(normalizedV.substring(0, 200)));
                                 isEqual = false;
                                 break;
                             } else if (!isMatch && isSourceEmpty) {
@@ -6090,7 +6105,7 @@ export default function luckysheetHandler() {
                         }
                     }
                     if (!isEqual) {
-                        console.log('[PasteCompare] 设置 isEqual=false 位置:', r, c);
+                        console.log('[PasteCompare] 设置 isEqual=false 行:', r);
                         break;
                     }
                 }

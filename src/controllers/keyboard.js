@@ -278,7 +278,31 @@ export function keyboardInitial(){
 
         if ($("#luckysheet-modal-dialog-mask").is(":visible") || $(event.target).hasClass("luckysheet-mousedown-cancel") || $(event.target).hasClass("sp-input") || (parseInt($("#luckysheet-input-box").css("top")) > 0 && $(event.target).closest(".luckysheet-input-box").length > 0 && kcode != keycode.ENTER && kcode != keycode.TAB && kcode != keycode.UP && kcode != keycode.DOWN && kcode != keycode.LEFT && kcode != keycode.RIGHT)) {
             let anchor = $(window.getSelection().anchorNode);
-            
+
+            // 编辑框内快捷键若交给浏览器，会生成 <b>/<strong> 等；updatecell 仅按 span 解析，确认后格式会丢失。与工具栏共用同一套逻辑。
+            if (
+                $(event.target).closest("#luckysheet-rich-text-editor").length > 0 &&
+                (ctrlKey || event.metaKey) &&
+                !shiftKey &&
+                !altKey
+            ) {
+                if (kcode === 66) {
+                    $("#luckysheet-icon-bold").click();
+                    event.preventDefault();
+                    return;
+                }
+                if (kcode === 73) {
+                    $("#luckysheet-icon-italic").click();
+                    event.preventDefault();
+                    return;
+                }
+                if (kcode === 85) {
+                    $("#luckysheet-icon-underline").click();
+                    event.preventDefault();
+                    return;
+                }
+            }
+
             if(anchor.parent().is("#luckysheet-helpbox-cell") || anchor.is("#luckysheet-helpbox-cell")){
                 if(kcode == keycode.ENTER){
                     let helpboxValue = $("#luckysheet-helpbox-cell").text();

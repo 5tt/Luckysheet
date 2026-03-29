@@ -2306,7 +2306,7 @@ function cellTextRender(textInfo, ctx, option) {
                 ctx.beginPath();
                 ctx.moveTo(
                     Math.floor((pos_x + item.startX) / Store.zoomRatio) + 0.5,
-                    Math.floor((pos_y + item.startY) / Store.zoomRatio),
+                    Math.floor((pos_y + item.startY) / Store.zoomRatio) + 0.5,
                 );
                 ctx.lineTo(
                     Math.floor((pos_x + item.endX) / Store.zoomRatio) + 0.5,

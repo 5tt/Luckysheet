@@ -703,6 +703,7 @@ function getCellTextInfo(cell , ctx, option){
                     desc:0,
                     fs:fontSize,
                     verticalAlign:verticalAlign,
+                    textBaseline: ctx.textBaseline,
                 });
 
                 textContent.values.push(word);
@@ -1364,6 +1365,7 @@ function getCellTextInfo(cell , ctx, option){
                             desc:size.desc,
                             fs:wordGroup.fs,
                             verticalAlign:verticalAlign,
+                            textBaseline: ctx.textBaseline,
                         });
 
                         textContent.values.push(wordGroup);
@@ -1449,6 +1451,7 @@ function getCellTextInfo(cell , ctx, option){
                                 desc:size.desc,
                                 fs:wordGroup.fs,
                                 verticalAlign:verticalAlign,
+                                textBaseline: ctx.textBaseline,
                             });
 
                         }
@@ -1487,6 +1490,7 @@ function getCellTextInfo(cell , ctx, option){
                                 desc:size.desc,
                                 fs:wordGroup.fs,
                                 verticalAlign:verticalAlign,
+                                textBaseline: ctx.textBaseline,
                             });
                         }
 
@@ -1649,6 +1653,7 @@ function getCellTextInfo(cell , ctx, option){
                 desc:measureText.actualBoundingBoxDescent,
                 fs:fontSize,
                 verticalAlign:verticalAlign,
+                textBaseline: ctx.textBaseline,
             });
 
             textContent.values.push(wordGroup);
@@ -1666,6 +1671,25 @@ function getCellTextInfo(cell , ctx, option){
     return textContent;
 }
 
+/** 与 fillText 使用的 textBaseline 一致，计算字形底缘附近的 y，用于下划线 */
+function computeUnderlineBaseY(top, asc, desc, textBaseline) {
+    asc = asc || 0;
+    desc = desc || 0;
+    let tb = textBaseline || "alphabetic";
+    if (tb === "middle") {
+        return top + asc / 2 + desc;
+    }
+    if (tb === "alphabetic" || tb === "ideographic") {
+        return top + desc;
+    }
+    if (tb === "top" || tb === "hanging") {
+        return top + asc + desc;
+    }
+    if (tb === "bottom") {
+        return top + 2;
+    }
+    return top + desc;
+}
 
 function drawLineInfo(wordGroup, cancelLine,underLine,option){
     let left = option.left, top = option.top, width=option.width, height = option.height, asc = option.asc,desc = option.desc,fs = option.fs;
@@ -1679,8 +1703,13 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
         underLine = wordGroup.style.un;
     }
 
+    if (underLine === 1 || underLine === true) {
+        underLine = "1";
+    } else if (underLine === 0 || underLine === false || underLine == null || underLine === "") {
+        underLine = "0";
+    }
+
     if(cancelLine!="0"){
-        debugger
 
         let offsetY = top-asc/2;
         if(option.verticalAlign == '0'){
@@ -1700,15 +1729,15 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
     }
 
     if(underLine!="0"){
-        // debugger
+         let baseY = computeUnderlineBaseY(top, asc, desc, option.textBaseline);
          wordGroup.underLine = [];
          if(underLine=="1" || underLine=="2"){
             let item = {};
             item.startX = left;
-            item.startY = top + 3;
+            item.startY = baseY + 1;
 
             item.endX = left + width;
-            item.endY = top + 3;
+            item.endY = baseY + 1;
 
             item.fs = fs;
 
@@ -1718,10 +1747,10 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
          if(underLine=="2"){
             let item = {};
             item.startX = left;
-            item.startY = top+desc;
+            item.startY = baseY + 4;
 
             item.endX = left + width;
-            item.endY = top+desc;
+            item.endY = baseY + 4;
 
             item.fs = fs;
 
@@ -1731,10 +1760,10 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
          if(underLine=="3" || underLine=="4"){
             let item = {};
             item.startX = left;
-            item.startY = top+desc;
+            item.startY = baseY + 1;
 
             item.endX = left + width;
-            item.endY = top+desc;
+            item.endY = baseY + 1;
 
             item.fs = fs;
 
@@ -1744,10 +1773,10 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
          if(underLine=="4"){
             let item = {};
             item.startX = left;
-            item.startY = top+desc+2;
+            item.startY = baseY + 4;
 
             item.endX = left + width;
-            item.endY = top+desc+2;
+            item.endY = baseY + 4;
 
             item.fs = fs;
 

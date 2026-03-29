@@ -98,22 +98,20 @@ export function updateInlineStringFormat(cell, attr, value, $input){
             }
 
             if(mid!=""){
-                // let styleObj = {};
-                // styleObj[attr] = value;
-                // let s = getFontStyleByCell(styleObj, undefined, undefined, false);
-                // let ukey = textTrim(s.substr(0, s.indexOf(':')));
-                // let uvalue = textTrim(s.substr(s.indexOf(':')+1));
-                // uvalue = uvalue.substr(0, uvalue.length-1);
-                // let cssText = span.style.cssText;
-                // cssText = removeClassWidthCss(cssText, attr);
-
-                let cssText = getCssText(span.style.cssText, attr, value);
-
+                let cssText;
                 if(inherit){
                     let box = $(span).closest("#luckysheet-input-box").get(0);
                     if(box!=null){
-                        cssText = extendCssText(box.style.cssText, cssText);
+                        // 纯文本继承容器格式：以容器 CSS（过滤为行内样式属性）为有效基础，
+                        // 在此基础上变更目标属性，避免 extendCssText 把 border-bottom 等
+                        // 重新覆盖到 getCssText 已移除的结果上（otherwise all-or-nothing 下划线）
+                        let baseCss = extendCssText(box.style.cssText, "");
+                        cssText = getCssText(baseCss, attr, value);
+                    } else {
+                        cssText = getCssText(span.style.cssText, attr, value);
                     }
+                } else {
+                    cssText = getCssText(span.style.cssText, attr, value);
                 }
                 
                 cont += "<span style='"+ cssText +"'>" + mid + "</span>";
@@ -261,7 +259,13 @@ export function enterKeyControll(cell){
             startSpan = $(startContainer).find("span");
             if(startSpan.length==0){
                 // 在末尾换行操作会导致数据丢失(覆盖)
-                startContainer.innerHTML = `<span>${startContainer.innerText}</span>`;
+                // 继承容器（#luckysheet-input-box）的格式样式，避免丢失单元格级粗体/斜体等属性
+                let boxCssText = "";
+                let box = $(startContainer).closest("#luckysheet-input-box").get(0);
+                if (box != null) {
+                    boxCssText = box.style.cssText || "";
+                }
+                startContainer.innerHTML = `<span style="${boxCssText}">${startContainer.innerText}</span>`;
                 startSpan = $(startContainer).find("span");
             }
             startSpan = startSpan.get(startSpan.length-1);

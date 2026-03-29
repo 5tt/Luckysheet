@@ -3877,17 +3877,30 @@ const menuButton = {
 
                 for (let c = col_st; c <= col_ed; c++) {
                     let value = d[r][c];
+                    // 编辑框内对当前单元格做局部富文本格式时，DOM 已由 updateInlineStringFormat 处理，
+                    // 跳过 updateInlineStringFormatOutside（会覆盖整段 ct.s）和单元格级属性写入，
+                    // 避免多行文本全段被同化；保存时 convertSpanToShareString 会从 DOM 正确读回
+                    const isEditingInlineCell =
+                        attr in inlineStyleAffectAttribute &&
+                        parseInt($("#luckysheet-input-box").css("top")) > 0 &&
+                        Store.luckysheetCellUpdate != null &&
+                        r === Store.luckysheetCellUpdate[0] &&
+                        c === Store.luckysheetCellUpdate[1];
 
                     if (getObjType(value) == "object") {
-                        // if(attr in inlineStyleAffectAttribute && isInlineStringCell(value)){
-                        updateInlineStringFormatOutside(value, attr, foucsStatus);
-                        // }
-                        // else{
-                        d[r][c][attr] = foucsStatus;
-                        // }
+                        if (!isEditingInlineCell) {
+                            // if(attr in inlineStyleAffectAttribute && isInlineStringCell(value)){
+                            updateInlineStringFormatOutside(value, attr, foucsStatus);
+                            // }
+                            // else{
+                            d[r][c][attr] = foucsStatus;
+                            // }
+                        }
                     } else {
                         d[r][c] = { v: value };
-                        d[r][c][attr] = foucsStatus;
+                        if (!isEditingInlineCell) {
+                            d[r][c][attr] = foucsStatus;
+                        }
                     }
 
                     // if(attr == "tr" && d[r][c].tb != null){
@@ -5299,13 +5312,12 @@ const menuButton = {
                 }
             }
 
-            if (key == "un" && value) {
-                style += "text-decoration:underline;";
-            }
         }
 
         if (!isInline) {
-            style += getFontStyleByCell(cell, checksAF, checksCF);
+            // 非 inlineStr 单元格：容器直接加 border-bottom，单行文本可直接显示下划线；
+            // inlineStr 单元格不走此分支，下划线由各 span（getInlineStringStyle）单独控制
+            style += getFontStyleByCell(cell, checksAF, checksCF, true, true);
         }
 
         return style;

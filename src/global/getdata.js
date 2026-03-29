@@ -325,7 +325,7 @@ export function getInlineStringStyle(r, c, data){
     return "";
 }
 
-export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true){
+export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true, includeUnderline=true){
     if(cell==null){
         return;
     }
@@ -374,6 +374,11 @@ export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true){
 
         if(key == "cl" && value != "0"){
             style += "text-decoration: line-through;";
+        }
+
+        if(key == "un" && value != "0" && value != 0 && includeUnderline){
+            let ulineColor = cell._color != null ? cell._color : cell.fc != null ? cell.fc : "#000000";
+            style += "border-bottom: 1px solid " + ulineColor + ";";
         }
 
     }

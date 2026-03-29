@@ -1375,12 +1375,46 @@ const luckysheetformula = {
 
             curv.ct.t = "inlineStr";
             curv.ct.s = convertSpanToShareString($input.find("span"));
+
+            // 纯文本转 inlineStr（如输入多行）时，继承原单元格文本样式，避免样式丢失
+            let baseInlineStyle = {};
+            if (curv.bl != null) {
+                baseInlineStyle.bl = curv.bl;
+            }
+            if (curv.it != null) {
+                baseInlineStyle.it = curv.it;
+            }
+            if (curv.ff != null) {
+                baseInlineStyle.ff = curv.ff;
+            }
+            if (curv.fs != null) {
+                baseInlineStyle.fs = curv.fs;
+            }
+            if (curv.fc != null) {
+                baseInlineStyle.fc = curv.fc;
+            }
+            if (curv.cl != null) {
+                baseInlineStyle.cl = curv.cl;
+            }
+            if (curv.un != null) {
+                baseInlineStyle.un = curv.un;
+            }
             if (isCopyVal) {
                 curv.ct.s = [
                     {
+                        ...baseInlineStyle,
                         v: inputText,
                     },
                 ];
+            } else {
+                // 粘贴的纯文本会通过 insertText 插入为文本节点，convertSpanToShareString 只处理 span 会丢失
+                const spanTextOnly = curv.ct.s.map((s) => s.v).join("");
+                // convertSpanToShareString 用 \r\n，而 $input.text() 返回 \n，规范化后再比较
+                // 避免仅换行符差异导致误触发 baseInlineStyle 回退（会抹掉分段的细粒度格式）
+                const spanTextNormalized = spanTextOnly.replace(/\r\n/g, "\n");
+                if (spanTextNormalized !== inputText) {
+                    curv.ct.s = [{ ...baseInlineStyle, v: inputText }];
+                }
             }
         }
 

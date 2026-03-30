@@ -1677,7 +1677,7 @@ function computeUnderlineBaseY(top, asc, desc, textBaseline) {
     desc = desc || 0;
     let tb = textBaseline || "alphabetic";
     if (tb === "middle") {
-        return top + asc / 2 + desc;
+        return top + asc / 2 + desc -2;
     }
     if (tb === "alphabetic" || tb === "ideographic") {
         return top + desc;
@@ -1747,10 +1747,9 @@ function drawLineInfo(wordGroup, cancelLine,underLine,option){
          if(underLine=="2"){
             let item = {};
             item.startX = left;
-            item.startY = baseY + 4;
+            item.startY = baseY + 2;
 
             item.endX = left + width;
-            item.endY = baseY + 4;
 
             item.fs = fs;
 

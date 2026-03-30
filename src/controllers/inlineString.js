@@ -98,20 +98,22 @@ export function updateInlineStringFormat(cell, attr, value, $input){
             }
 
             if(mid!=""){
-                let cssText;
+                // let styleObj = {};
+                // styleObj[attr] = value;
+                // let s = getFontStyleByCell(styleObj, undefined, undefined, false);
+                // let ukey = textTrim(s.substr(0, s.indexOf(':')));
+                // let uvalue = textTrim(s.substr(s.indexOf(':')+1));
+                // uvalue = uvalue.substr(0, uvalue.length-1);
+                // let cssText = span.style.cssText;
+                // cssText = removeClassWidthCss(cssText, attr);
+
+                let cssText = getCssText(span.style.cssText, attr, value);
+
                 if(inherit){
                     let box = $(span).closest("#luckysheet-input-box").get(0);
                     if(box!=null){
-                        // 纯文本继承容器格式：以容器 CSS（过滤为行内样式属性）为有效基础，
-                        // 在此基础上变更目标属性，避免 extendCssText 把 border-bottom 等
-                        // 重新覆盖到 getCssText 已移除的结果上（otherwise all-or-nothing 下划线）
-                        let baseCss = extendCssText(box.style.cssText, "");
-                        cssText = getCssText(baseCss, attr, value);
-                    } else {
-                        cssText = getCssText(span.style.cssText, attr, value);
+                        cssText = extendCssText(box.style.cssText, cssText);
                     }
-                } else {
-                    cssText = getCssText(span.style.cssText, attr, value);
                 }
                 
                 cont += "<span style='"+ cssText +"'>" + mid + "</span>";

@@ -376,9 +376,13 @@ export function getFontStyleByCell(cell,checksAF,checksCF, isCheck=true, include
             style += "text-decoration: line-through;";
         }
 
-        if(key == "un" && value != "0" && value != 0 && includeUnderline){
-            let ulineColor = cell._color != null ? cell._color : cell.fc != null ? cell.fc : "#000000";
-            style += "border-bottom: 1px solid " + ulineColor + ";";
+        if(key == "un" && value != "0" && value != 0){
+            // lucky-underline 始终输出，供 convertCssToStyleList 正确还原 un 属性（无视觉继承副作用）
+            style += "lucky-underline:" + value + ";";
+            if(includeUnderline){
+                let ulineColor = cell._color != null ? cell._color : cell.fc != null ? cell.fc : "#000000";
+                style += "border-bottom: 1px solid " + ulineColor + ";";
+            }
         }
 
     }

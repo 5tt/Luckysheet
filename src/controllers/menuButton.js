@@ -3877,9 +3877,10 @@ const menuButton = {
 
                 for (let c = col_st; c <= col_ed; c++) {
                     let value = d[r][c];
-                    // 编辑框内对当前单元格做局部富文本格式时，DOM 已由 updateInlineStringFormat 处理，
-                    // 跳过 updateInlineStringFormatOutside（会覆盖整段 ct.s）和单元格级属性写入，
-                    // 避免多行文本全段被同化；保存时 convertSpanToShareString 会从 DOM 正确读回
+                    // 在编辑框内对当前单元格做局部富文本格式时，仅跳过 updateInlineStringFormatOutside
+                    // （该函数会把整段 ct.s 全部同化，覆盖局部编辑结果）；
+                    // 单元格级属性（d[r][c][attr]）仍需正常更新，以支持加粗/斜体等按钮的 toggle 状态检测。
+                    // DOM 已由 updateInlineStringFormat 处理；保存时 convertSpanToShareString 从 DOM 正确读回 ct.s。
                     const isEditingInlineCell =
                         attr in inlineStyleAffectAttribute &&
                         parseInt($("#luckysheet-input-box").css("top")) > 0 &&
@@ -3889,18 +3890,12 @@ const menuButton = {
 
                     if (getObjType(value) == "object") {
                         if (!isEditingInlineCell) {
-                            // if(attr in inlineStyleAffectAttribute && isInlineStringCell(value)){
                             updateInlineStringFormatOutside(value, attr, foucsStatus);
-                            // }
-                            // else{
-                            d[r][c][attr] = foucsStatus;
-                            // }
                         }
+                        d[r][c][attr] = foucsStatus;
                     } else {
                         d[r][c] = { v: value };
-                        if (!isEditingInlineCell) {
-                            d[r][c][attr] = foucsStatus;
-                        }
+                        d[r][c][attr] = foucsStatus;
                     }
 
                     // if(attr == "tr" && d[r][c].tb != null){
@@ -5315,9 +5310,9 @@ const menuButton = {
         }
 
         if (!isInline) {
-            // 非 inlineStr 单元格：容器直接加 border-bottom，单行文本可直接显示下划线；
-            // inlineStr 单元格不走此分支，下划线由各 span（getInlineStringStyle）单独控制
-            style += getFontStyleByCell(cell, checksAF, checksCF, true, true);
+            // includeUnderline=false：不向容器添加 border-bottom，
+            // 避免通过 extendCssText 传播到所有 span，下划线由各 span 单独控制
+            style += getFontStyleByCell(cell, checksAF, checksCF, true, false);
         }
 
         return style;

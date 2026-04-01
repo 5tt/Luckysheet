@@ -2910,6 +2910,55 @@ const menuButton = {
             mouseclickposition($menuButton, menuleft - 48, $(this).offset().top + 25, "lefttop");
         });
 
+        const getToggleStatus = function(styleKey) {
+            // 富文本局部编辑时，单元格级 attr（如 d[r][c].un）不能准确反映当前选区状态，
+            // 且复制内容可能导致工具栏高亮滞后，因此直接读取当前选区节点样式判断 toggle 基准。
+            if (parseInt($("#luckysheet-input-box").css("top")) > 0 && Store.luckysheetCellUpdate != null) {
+                const w = window.getSelection();
+                if (w != null && w.type != "None" && w.rangeCount > 0) {
+                    const range = w.getRangeAt(0);
+                    const cac = range.commonAncestorContainer;
+                    const $editor = $(cac).closest("#luckysheet-rich-text-editor, #luckysheet-functionbox-cell");
+                    if ($editor.length > 0 && range.collapsed === false) {
+                        let node = range.startContainer;
+                        if (node != null && node.nodeType === 3) {
+                            node = node.parentElement;
+                        }
+                        if (node != null && node.nodeType === 1) {
+                            const style = window.getComputedStyle(node);
+                            const textDecoration = (style.textDecoration || "").toLowerCase();
+                            const textDecorationLine = (style.textDecorationLine || "").toLowerCase();
+                            const borderBottomStyle = (style.borderBottomStyle || "").toLowerCase();
+                            const borderBottomWidth = (style.borderBottomWidth || "").toLowerCase();
+                            const inlineCss = ((node.style && node.style.cssText) || "").toLowerCase();
+
+                            if (styleKey === "bl") {
+                                const fw = parseInt(style.fontWeight, 10);
+                                return style.fontWeight === "bold" || (!isNaN(fw) && fw >= 600);
+                            }
+                            if (styleKey === "it") {
+                                return style.fontStyle === "italic";
+                            }
+                            if (styleKey === "cl") {
+                                return textDecoration.indexOf("line-through") > -1 || textDecorationLine.indexOf("line-through") > -1;
+                            }
+                            if (styleKey === "un") {
+                                return (
+                                    textDecoration.indexOf("underline") > -1 ||
+                                    textDecorationLine.indexOf("underline") > -1 ||
+                                    (borderBottomStyle !== "" && borderBottomStyle !== "none" && borderBottomWidth !== "0px") ||
+                                    inlineCss.indexOf("lucky-underline:1") > -1 ||
+                                    inlineCss.indexOf("lucky-underline: 1") > -1
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            return checkTheStatusOfTheSelectedCells(styleKey, 1);
+        };
+
         //加粗
         $("#luckysheet-icon-bold")
             .mousedown(function(e) {
@@ -2919,7 +2968,7 @@ const menuButton = {
             .click(function(e) {
                 let d = editor.deepCopyFlowData(Store.flowdata);
 
-                let flag = checkTheStatusOfTheSelectedCells("bl", 1);
+                let flag = getToggleStatus("bl");
                 let foucsStatus = flag ? 0 : 1;
 
                 _this.updateFormat(d, "bl", foucsStatus);
@@ -2934,7 +2983,7 @@ const menuButton = {
             .click(function() {
                 let d = editor.deepCopyFlowData(Store.flowdata);
 
-                let flag = checkTheStatusOfTheSelectedCells("it", 1);
+                let flag = getToggleStatus("it");
                 let foucsStatus = flag ? 0 : 1;
 
                 _this.updateFormat(d, "it", foucsStatus);
@@ -2948,7 +2997,7 @@ const menuButton = {
             })
             .click(function() {
                 let d = editor.deepCopyFlowData(Store.flowdata);
-                let flag = checkTheStatusOfTheSelectedCells("cl", 1);
+                let flag = getToggleStatus("cl");
                 let foucsStatus = flag ? 0 : 1;
 
                 _this.updateFormat(d, "cl", foucsStatus);
@@ -2962,7 +3011,7 @@ const menuButton = {
             })
             .click(function() {
                 let d = editor.deepCopyFlowData(Store.flowdata);
-                let flag = checkTheStatusOfTheSelectedCells("un", 1);
+                let flag = getToggleStatus("un");
                 let foucsStatus = flag ? 0 : 1;
 
                 _this.updateFormat(d, "un", foucsStatus);
